@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: basedatos
+    environment:
+      MYSQL_DATABASE: usuarios
+      MYSQL_USER: root
+      MYSQL_PASSWORD: daxtter
+      MYSQL_ROOT_PASSWORD: daxtter
+    ports:
+      - "3306:3306"
+    restart: always
+    volumes_from:
+      - ./database:/var/lib/mysql
+      - ./database.sql:/docker-entrypoint-initdb.d/dump.sql
+    
+  web:
+    image: php:7.0-apache
+    container_name: myserver
+    ports:
+      - "9090:80"
+    volumes:
+      - ./src:/var/www/html
+    links:
+      - mysql
